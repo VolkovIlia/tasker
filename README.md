@@ -1,9 +1,11 @@
 # Tasker
 
 Microservice architecture scaffold for a Telegram bot that turns chat messages into tasks and documents.
+All services are accessible through a unified API gateway that performs simple round-robin load balancing.
 
 ## Services
 
+- **api-gateway** – single entrypoint and load balancer for all internal services.
 - **bot** – Telegram webhook handler and command router.
 - **task-service** – CRUD for tasks and reminders.
 - **doc-service** – Generates meeting protocols, checklists, and sprint plans.
@@ -19,12 +21,14 @@ Microservice architecture scaffold for a Telegram bot that turns chat messages i
    ```bash
    docker-compose up --build
    ```
-3. Services will be available on the following ports:
-   - bot: `http://localhost:8000`
-   - task-service: `http://localhost:8001`
-   - doc-service: `http://localhost:8002`
-   - reminder-service: `http://localhost:8003`
+3. Access the API gateway at `http://localhost:8080`.
+4. Internal services run in the Docker network and are not exposed directly.
+5. Supporting dependencies:
    - qdrant (vector-db): `http://localhost:6333`
    - minio (object-store): `http://localhost:9000`
 
-This repository currently contains only a minimal skeleton intended for further development.
+This repository currently contains only a minimal skeleton intended for further development. Each service includes basic tests; run them with:
+
+```bash
+pytest
+```
