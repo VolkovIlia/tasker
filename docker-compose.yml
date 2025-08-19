@@ -34,7 +34,6 @@ services:
 
   doc-service:
     build: ./services/doc_service
-
   reminder-service:
     build: ./services/reminder_service
     depends_on:
