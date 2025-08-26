@@ -1,30 +1,49 @@
 # Tasker
 
-Microservice architecture scaffold for a Telegram bot that turns chat messages into tasks and documents.
+Minimal microservice architecture featuring an API gateway and a Telegram bot
+service.  The services use a tiny in-repository stub of FastAPI so that the
+codebase can be executed and tested without external dependencies.
+
+## Setup and Testing
+
+1. Ensure a recent version of **Python (3.11+)** is available.
+2. Clone the repository and optionally create a virtual environment:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+3. The repo vendors small stubs of both **FastAPI** and the
+   ``python-telegram-bot`` library, so no extra packages are required for local
+   tests.  To verify everything works run:
+
+   ```bash
+   pytest
+   ```
+   All tests should pass.
 
 ## Services
 
-- **bot** – Telegram webhook handler and command router.
-- **task-service** – CRUD for tasks and reminders.
-- **doc-service** – Generates meeting protocols, checklists, and sprint plans.
-- **reminder-service** – Schedules and fires reminders.
-- **db** – PostgreSQL storage for metadata.
-- **vector-db** – Qdrant instance for RAG-light.
-- **object-store** – S3-compatible bucket for attachments.
+- **api-gateway** – single entry point that forwards requests to internal
+  services using round-robin load balancing.
+- **bot** – Telegram webhook handler supporting `/ping` and `/who` commands and
+  demonstrating Telegram menu configuration.
 
-## Getting Started
+## Development
 
-1. Install [Docker](https://docs.docker.com/get-docker/).
-2. Start the stack:
-   ```bash
-   docker-compose up --build
-   ```
-3. Services will be available on the following ports:
-   - bot: `http://localhost:8000`
-   - task-service: `http://localhost:8001`
-   - doc-service: `http://localhost:8002`
-   - reminder-service: `http://localhost:8003`
-   - qdrant (vector-db): `http://localhost:6333`
-   - minio (object-store): `http://localhost:9000`
+The repository contains unit tests for both services.  To run them simply
+execute:
 
-This repository currently contains only a minimal skeleton intended for further development.
+```bash
+pytest
+```
+
+## Running with Docker
+
+`docker-compose.yml` describes how the services could be containerised.  Building
+these images requires an Internet connection to install the real FastAPI
+package.  Launch the stack with:
+
+```bash
+docker-compose up --build
+```
