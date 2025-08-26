@@ -26,8 +26,10 @@ codebase can be executed and tested without external dependencies.
 
 - **api-gateway** – single entry point that forwards requests to internal
   services using round-robin load balancing.
-- **bot** – Telegram webhook handler supporting `/ping` and `/who` commands and
-  demonstrating Telegram menu configuration.
+- **bot** – Telegram webhook handler supporting `/ping`, `/who` and `/task`
+  commands and demonstrating Telegram menu configuration.
+- **task** – in-memory task management service exposing `POST /tasks` and
+  `GET /tasks` endpoints.
 
 ## Development
 
@@ -47,3 +49,20 @@ package.  Launch the stack with:
 ```bash
 docker-compose up --build
 ```
+
+## `/task` Command
+
+Create a task directly from chat by typing:
+
+```
+/task <title> [@assignee] [YYYY-MM-DD] [#tag1 #tag2]
+```
+
+Example:
+
+```
+/task finish report @alice 2024-12-31 #work #urgent
+```
+
+The bot forwards the request to the API gateway which creates the task in the
+task service and replies with the new task identifier.

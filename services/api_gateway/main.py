@@ -73,3 +73,17 @@ def bot_webhook(payload: Dict[str, Any]) -> Dict[str, Any]:
     status, data = gateway.forward("bot", "POST", "/webhook", payload)
     # ``status`` is ignored because the example services always return 200
     return data
+
+
+@app.post("/task")
+def create_task(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Proxy task creation to the task service."""
+    status, data = gateway.forward("task", "POST", "/tasks", payload)
+    return data
+
+
+@app.get("/task")
+def list_tasks() -> Any:
+    """Return tasks from the task service."""
+    status, data = gateway.forward("task", "GET", "/tasks")
+    return data
