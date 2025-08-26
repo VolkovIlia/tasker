@@ -25,6 +25,7 @@ task_main = importlib.util.module_from_spec(task_spec)
 task_spec.loader.exec_module(task_main)
 gateway.register("task", [task_main.app])
 
+
 client = TestClient(app)
 
 def test_round_robin_forwarding():
